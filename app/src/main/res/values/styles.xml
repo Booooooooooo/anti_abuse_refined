@@ -8,9 +8,17 @@
         <item name="colorPrimary">@color/myColorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/myStatusBarColor</item>
+        <item name="android:textColorPrimary">@color/myDateTextColor</item>
+        <item name="colorPrimary">@color/myColorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -29,4 +37,6 @@
         <item name="android:dateTextAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:selectedWeekBackgroundColor">@android:color/transparent</item>
     </style>
+
+
 </resources>
