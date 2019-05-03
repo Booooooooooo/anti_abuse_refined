@@ -49,13 +49,21 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "switch fragment", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "switch fragment", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
                 fm = getFragmentManager();
                 ft = fm.beginTransaction();
-                ft.replace(android.R.id.content, particularFrag);
-                ft.commit();
-                fab.setImageBitmap(textAsBitmap("历史", 50, Color.WHITE));
+                if(historyFrag.isVisible()){
+                    ft.replace(android.R.id.content, particularFrag);
+                    ft.commit();
+                    fab.setImageBitmap(textAsBitmap("历史", 50, Color.WHITE));
+                }
+                if(particularFrag.isVisible()){
+                    ft.replace(android.R.id.content, historyFrag);
+                    ft.commit();
+                    fab.setImageBitmap(textAsBitmap("当日", 50, Color.WHITE));
+                }
+
                 //particularFrag.setData();
             }
         });
