@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+>
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -70,34 +70,17 @@
                 android:layout_gravity="right|bottom" />
         </LinearLayout>
 
-        <com.bin.david.form.core.SmartTable
+        <com.example.wyb.anti_abuse_refined.MyTable
             android:id="@+id/table"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="wrap_content"/>
+
+        <!---com.example.wyb.anti_abuse_refined.GitHubContributionView
+            android:id="@+id/table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.example.wyb.anti_abuse_refined.GitHubContributionView-->
 
     </LinearLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/myColorPrimary" />
-
-
-
-    <TextView android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="历 史"
-        android:shadowColor="@color/shadowColor"
-        android:elevation="6dp"
-        android:textSize="12dp"
-        android:textColor="#fff"
-        app:layout_anchor="@id/fab"
-        app:layout_anchorGravity="center"/>
-
 
 </android.support.design.widget.CoordinatorLayout>
