@@ -20,10 +20,11 @@ public class MyTable extends View {
     private Context context;
     /**灰色方格的默认颜色**/
     private final int DEFAULT_BOX_COLOUR = Color.rgb(230, 230, 230);
+    private final int NORMAL_BOX_COLOUR = Color.rgb(202, 213, 255);
     //private final int DEFAULT_BOX_COLOUR = ContextCompat.getColor(context, R.color.colorPrimary);
     /**提交次数颜色值**/
     private final int[] COLOUR_LEVEL =
-            new int[]{Color.rgb(255, 60, 34), Color.rgb(255, 211, 114), Color.rgb(123, 150, 254), DEFAULT_BOX_COLOUR};//红黄蓝灰
+            new int[]{Color.rgb(255, 60, 34), Color.rgb(255, 211, 114), Color.rgb(123, 150, 254), NORMAL_BOX_COLOUR,DEFAULT_BOX_COLOUR};//红黄蓝灰
 
     private String[] hours =
             new String[]{"8:00~13:00","14:00~20:00"};
@@ -127,15 +128,15 @@ public class MyTable extends View {
             int j = hour.hour;
             if(j >= 8 && j <= 13){
                 j -= 8;
-                startX = padding + j * (boxSide + boxInterval);
-                startY = padding + i * (boxSide + boxInterval);
+                startX = padding + i * (boxSide + boxInterval);
+                startY = padding + j * (boxSide + boxInterval);
                 endX = startX + boxSide;
                 endY = startY + boxSide;
             }
             else{
                 j -= 14;
-                startX = padding + (j + 6) * (boxSide + boxInterval) + 2 * boxInterval;
-                startY = padding + i * (boxSide + boxInterval);
+                startX = padding + (i + 6) * (boxSide + boxInterval) + 2 * boxInterval;
+                startY = padding + j * (boxSide + boxInterval);
                 endX = startX + boxSide;
                 endY = startY + boxSide;
             }
@@ -268,18 +269,7 @@ public class MyTable extends View {
      */
     private int getColour(int contribution){
         int colour = 0;
-        if (contribution <= 0){
-            colour = COLOUR_LEVEL[3];
-        }
-        if (contribution == 1){
-            colour = COLOUR_LEVEL[2];
-        }
-        if (contribution == 2){
-            colour = COLOUR_LEVEL[1];
-        }
-        if (contribution == 3){
-            colour = COLOUR_LEVEL[0];
-        }
+        colour = COLOUR_LEVEL[contribution];
         return colour;
     }
 
