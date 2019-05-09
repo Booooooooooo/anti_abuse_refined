@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 应用进入后，默认选择点击Fragment01
          */
-        ft.replace(android.R.id.content, historyFrag);
+        ft.replace(android.R.id.content, particularFrag);
         ft.commit();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);

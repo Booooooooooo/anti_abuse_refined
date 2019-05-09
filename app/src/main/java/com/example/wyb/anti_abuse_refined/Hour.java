@@ -21,6 +21,8 @@ public class Hour implements Serializable {
     public float endX;
     public float endY;
 
+    public boolean[] normal = new boolean[4];
+
     @Override
     public String toString() {
         //这里直接在弹出框中显示

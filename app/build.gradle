@@ -36,4 +36,5 @@ dependencies {
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.haibin:calendarview:3.2.0'
     implementation 'com.github.huangyanbin:SmartTable:2.2.0'
+    implementation 'com.android.support:recyclerview-v7:24.2.1'
 }

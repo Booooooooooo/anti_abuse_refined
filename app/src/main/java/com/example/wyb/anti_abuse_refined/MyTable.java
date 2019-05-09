@@ -24,7 +24,7 @@ public class MyTable extends View {
     //private final int DEFAULT_BOX_COLOUR = ContextCompat.getColor(context, R.color.colorPrimary);
     /**提交次数颜色值**/
     private final int[] COLOUR_LEVEL =
-            new int[]{Color.rgb(255, 60, 34), Color.rgb(255, 211, 114), Color.rgb(123, 150, 254), NORMAL_BOX_COLOUR,DEFAULT_BOX_COLOUR};//红黄蓝灰
+            new int[]{DEFAULT_BOX_COLOUR,NORMAL_BOX_COLOUR,Color.rgb(255, 60, 34), Color.rgb(255, 211, 114), Color.rgb(123, 150, 254)};//红黄蓝灰
 
     private String[] hours =
             new String[]{"8:00~13:00","14:00~20:00"};
@@ -47,6 +47,7 @@ public class MyTable extends View {
     private float downX;//按下的点的X坐标
     private float downY;//按下的点的Y坐标
     private Hour clickDay;//按下所对应的天
+
 
     public MyTable(Context context) {
         this(context, null);
@@ -247,15 +248,16 @@ public class MyTable extends View {
 
     /**
      * 设置某天的次数
-
-     * @param contribution 次数
+    1iscry, 2heart, 3accelerate
      */
-    public void setData(int hour,int minute,int contribution){
+    public void setData(int hour,int minute, int type){
         //先找到是第几天，为了方便不做参数检测了
         for (Hour d : mHours) {
             if (d.hour == hour && d.minute == minute){
-                d.contribution = contribution;
-                d.colour = getColour(contribution);
+                d.contribution++;
+                d.colour = getColour(d.contribution);
+                d.normal[type] = true;
+
                 break;
             }
         }
