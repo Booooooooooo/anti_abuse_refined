@@ -22,14 +22,15 @@ public class TopViewForPar extends View {
     public TopViewForPar(Context context, AttributeSet attrs, boolean isRed) {
         super(context, attrs);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.isRed = isRed;
+        //this.isRed = isRed;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        //isRed = true;
         //int color = (int)Long.parseLong("CAD5FF", 16);
-        if(!isRed)mPaint.setColor(Color.rgb(202, 213, 255));
-        else mPaint.setColor(Color.rgb(255,213, 184));
+        //if(!isRed)mPaint.setColor(Color.rgb(202, 213, 255));
+        mPaint.setColor(Color.rgb(255,213, 184));
         LinearGradient lg=new LinearGradient(0,0,getWidth(),getHeight(),Color.rgb(135,179, 255),Color.rgb(202, 213, 255), Shader.TileMode.CLAMP);
         getStatusHeight(getContext());
         canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);

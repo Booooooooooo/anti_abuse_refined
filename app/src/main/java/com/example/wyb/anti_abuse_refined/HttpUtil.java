@@ -1,10 +1,13 @@
 package com.example.wyb.anti_abuse_refined;
 
+import org.apache.http.params.CoreConnectionPNames;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,9 +15,12 @@ import okhttp3.Request;
 public class HttpUtil {
 
     public static void sendOkHttpRequest(String address, okhttp3.Callback callback){
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
+                .build();
         Request request = new Request.Builder().url(address).build();
         client.newCall(request).enqueue(callback);
+
     }
 
     public static void sendHttpRequest(final String address, final HttpCallbackListener listener){

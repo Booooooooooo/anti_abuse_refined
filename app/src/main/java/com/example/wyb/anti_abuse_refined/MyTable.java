@@ -24,20 +24,20 @@ public class MyTable extends View {
     //private final int DEFAULT_BOX_COLOUR = ContextCompat.getColor(context, R.color.colorPrimary);
     /**提交次数颜色值**/
     private final int[] COLOUR_LEVEL =
-            new int[]{DEFAULT_BOX_COLOUR,NORMAL_BOX_COLOUR,Color.rgb(255, 60, 34), Color.rgb(255, 211, 114), Color.rgb(123, 150, 254)};//红黄蓝灰
+            new int[]{DEFAULT_BOX_COLOUR,NORMAL_BOX_COLOUR, Color.rgb(123, 150, 254), Color.rgb(255, 211, 114),Color.rgb(255, 60, 34)};//灰蓝蓝黄红
 
     private String[] hours =
             new String[]{"8:00~13:00","14:00~20:00"};
     /**默认的padding,绘制的时候不贴边画**/
-    private int padding = 30;
+    private int padding = 35;
     /**小方格的默认边长**/
-    private int boxSide = 22;
+    private int boxSide = 20;
     /**小方格间的默认间隔**/
     private int boxInterval = 8;
     /**所有周的列数**/
     private int column = 12;
 
-    private List<Hour> mHours;//一年中所有的天
+    public List<Hour> mHours;//一年中所有的天
     private Paint boxPaint;//方格画笔
     private Paint textPaint;//文字画笔
     private Paint infoPaint;//弹出框画笔
@@ -107,7 +107,7 @@ public class MyTable extends View {
         column = 0;
         canvas.save();
         drawBox(canvas);
-        drawTag(canvas);
+        //drawTag(canvas);
         drawPopupInfo(canvas);
         canvas.restore();
     }
@@ -136,7 +136,7 @@ public class MyTable extends View {
             }
             else{
                 j -= 14;
-                startX = padding + (i + 6) * (boxSide + boxInterval) + 2 * boxInterval;
+                startX = padding + (i + 6) * (boxSide + boxInterval) + 5 * boxInterval;
                 startY = padding + j * (boxSide + boxInterval);
                 endX = startX + boxSide;
                 endY = startY + boxSide;
@@ -192,15 +192,15 @@ public class MyTable extends View {
             }
         }
         //点击完要刷新，这样每次点击不同的方格，弹窗就可以在相应的位置显示
-        refreshView();
+        //refreshView();
     }
 
     /**
      * 点击弹出文字提示
      */
-    private void refreshView() {
+    /*private void refreshView() {
         invalidate();
-    }
+    }*/
 
     /**
      * 画方格上的文字弹框
@@ -254,14 +254,22 @@ public class MyTable extends View {
         //先找到是第几天，为了方便不做参数检测了
         for (Hour d : mHours) {
             if (d.hour == hour && d.minute == minute){
-                d.contribution++;
-                d.colour = getColour(d.contribution);
-                d.normal[type] = true;
+                if(type == -1){
+                    d.contribution++;
+                    d.colour = getColour(d.contribution);
+                }
+                else if(d.normal[type] == false){
+                    d.contribution++;
+                    d.colour = getColour(d.contribution);
+                    d.normal[type] = true;
+                    Log.d("SoundFragment", hour + ":"+minute + "contribuion"+d.contribution);
+
+                }
 
                 break;
             }
         }
-        refreshView();
+        //refreshView();
     }
 
     /**
@@ -271,6 +279,7 @@ public class MyTable extends View {
      */
     private int getColour(int contribution){
         int colour = 0;
+        //contribution = Math.min(contribution + 1, 4);
         colour = COLOUR_LEVEL[contribution];
         return colour;
     }

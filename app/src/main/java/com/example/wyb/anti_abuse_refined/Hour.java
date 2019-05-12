@@ -14,6 +14,7 @@ public class Hour implements Serializable {
     public int contribution = 0;
     /**默认颜色,根据提交次数改变**/
     public int colour = Color.rgb(230, 230, 230);//灰色
+    public boolean vis = false;
 
     /**方格坐标，左上点，右下点，确定矩形范围**/
     public float startX;

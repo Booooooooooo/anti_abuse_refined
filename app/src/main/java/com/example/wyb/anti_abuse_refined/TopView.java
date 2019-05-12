@@ -27,6 +27,7 @@ public class TopView extends View {
     protected void onDraw(Canvas canvas) {
         //int color = (int)Long.parseLong("CAD5FF", 16);
         mPaint.setColor(Color.rgb(202, 213, 255));
+        //mPaint.setColor(Color.rgb(255,213, 184));
         LinearGradient lg=new LinearGradient(0,0,getWidth(),getHeight(),Color.rgb(135,179, 255),Color.rgb(202, 213, 255), Shader.TileMode.CLAMP);
         getStatusHeight(getContext());
         canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);

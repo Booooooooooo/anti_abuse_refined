@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import okhttp3.Call;
@@ -50,23 +51,25 @@ public class ParticularFrag extends Fragment {
     private boolean isRed;
     private MyTable table;
     private List<item> itemList = new ArrayList<>();
+    private ItemAdapter adapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view =  inflater.inflate(R.layout.particular, container, false);
 
+
         RoundImageView imageView = (RoundImageView)view.findViewById(R.id.image);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.boy);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.user_img);
         imageView.setmBitmap(bitmap);
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH)+1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        TextView dayTxt = (TextView)view.findViewById(R.id.day);
-        TextView monthTxt = (TextView)view.findViewById(R.id.month);
-        dayTxt.setText("a"+day);
-        monthTxt.setText("/"+month);
+//        TextView dayTxt = (TextView)view.findViewById(R.id.day);
+//        TextView monthTxt = (TextView)view.findViewById(R.id.month);
+//        dayTxt.setText("a"+day);
+//        monthTxt.setText("/"+month);
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
@@ -75,27 +78,54 @@ public class ParticularFrag extends Fragment {
         table = (MyTable)view.findViewById(R.id.table);
         for(int i = 8; i < hour; i++){
             for(int j = 0; j < 6; j ++){
-               table.setData(i, j, 0);
+               table.setData(i, j, -1);
             }
         }
         for(int j = 0; j < minute; j+= 10){
-            table.setData(hour, j / 10, 0);
+            table.setData(hour, j / 10, -1);
         }
 
-        getData();
-//        table.setData(8,0);
-//        table.setData(9,1);
-//        table.setData(14,5);
-        itemList.add(new item("ceshi", true, true, true));
-        itemList.add(new item("ceshi2", true, false, true));
-        itemList.add(new item("cheshi3", false, false, false));
+////        table.setData(8,0);
+////        table.setData(9,1);
+//        table.setData(14,5, 2);
+        get("iscry", 0);
+        get("heart", 1);
+        get("accelerate", 2);
+        addList();
+        //view.invalidate();
+
+
+//        itemList.add(new item("ceshi1", true, true, true));
+//        itemList.add(new item("ceshi2", true, false, true));
+//        itemList.add(new item("ceshi3", true, false, false));
 
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        ItemAdapter adapter = new ItemAdapter(itemList);
+        adapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(adapter);
+        getData();
+        //addList();
         return view;
+    }
+
+    public void addList(){
+        Iterator<Hour> iterator = table.mHours.iterator();
+        for(int i = 0; i < table.mHours.size(); i++){
+            Hour h = table.mHours.get(i);
+            if(table.mHours.get(i).vis)continue;
+
+            String time = h.hour+":"+h.minute+"0";
+            boolean heart = h.normal[0];
+            boolean sound = h.normal[1];
+            boolean drop = h.normal[2];
+            if(h.contribution > 1){
+                table.mHours.get(i).vis = true;
+                itemList.add(new item(time, heart, sound, drop));
+                Log.d("SoundFragment", time + "contribuion"+h.contribution);
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     public static String getTime(String user_time) {
@@ -112,46 +142,39 @@ public class ParticularFrag extends Fragment {
         }
         return re_time;
     }
-    // 将时间戳转为字符串
-    public static String getStrTime(String cc_time) {
-        String re_StrTime = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒");
-        // 例如：
-        //cc_time=1291778220 ;
-        long lcc_time = Long.valueOf(cc_time);
-        re_StrTime = sdf.format(new Date(lcc_time * 1000L));
-        return re_StrTime;
-    }
 
 
     private void parseJSONWithJSONObject(String jsonData, int id){
+        //Log.d("SoundFragment", "type:" + id);
         try{
+            //JSONObject start = new JSONObject(String.valueOf(response.getJSONObject()));
             JSONObject jsonObject = new JSONObject(jsonData);
             String currentstamp = jsonObject.getString("currentStamp");
             JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
             String startStamp = jsonObject.getString("startStamp");
-            Log.d("SoundFragment", "currentStamp: " + currentstamp);
-            Log.d("SoundFragment", "startStamp: " + startStamp);
+            //Log.d("SoundFragment", "currentStamp: " + currentstamp);
+            //Log.d("SoundFragment", "startStamp: " + startStamp);
             for(int i = 0; i < jsonArray.length(); i++){
                 JSONObject dataObject = jsonArray.getJSONObject(i);
                 String result = dataObject.getString("state");
                 long stamp = Long.parseLong(dataObject.getString("stamp"));
-                Date date = new Date(stamp);
+                Date date = new Date(stamp * 1000L);
                 Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
                 calendar.setTime(date);
-                table.setData(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), id);
+                if(result != "0.0"){
+                    table.setData(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE) / 10, id);
+                    //Log.d("SoundFragment", "result: " + result);
+                    //Log.d("SoundFragment", "stamp:" + date);
+                }
 
-                //                array.add("日期"+stamp+result+(datanum++));
-                Log.d("SoundFragment", "result: " + result);
-                Log.d("SoundFragment", "stamp:" + date);
             }
         }catch (Exception e){
-            Log.d("SoundFragment", "error2");
+            Log.d("SoundFragment", "error2" + id);
             e.printStackTrace();
         }
     }
     public void get(String type, final int id){
-        String address = "http://47.102.151.34:8000/" + type +"?currentStamp=156254234&startStamp=1554733643";
+        String address = "http://47.102.151.34:8000/" + type +"?currentStamp=1557710924&startStamp=1556934223";
         HttpUtil.sendOkHttpRequest(address, new okhttp3.Callback(){
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -172,13 +195,15 @@ public class ParticularFrag extends Fragment {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                //get("iscry", 0);
-                //get("heart", 1);
+                get("iscry", 0);
+                get("heart", 1);
                 get("accelerate", 2);
+                addList();
                 Log.d("SoundFragment", "refreshed");
-                handler.postDelayed(this, 2000);
+                handler.postDelayed(this, 10000);
 ////                Collections.reverse(array);
-//                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+                view.invalidate();
                 //setListViewHeightBaseOnChildren(listView, 30);
             }
         };

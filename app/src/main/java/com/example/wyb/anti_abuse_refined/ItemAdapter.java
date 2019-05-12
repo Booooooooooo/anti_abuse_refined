@@ -2,12 +2,14 @@ package com.example.wyb.anti_abuse_refined;
 
 import android.media.Image;
 import android.provider.ContactsContract;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -41,6 +43,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position){
+        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+        layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
         item it = items.get(position);
         holder.timetxt.setText(it.getTimeTxt());
         holder.statetxt.setText(it.getStateTxt());

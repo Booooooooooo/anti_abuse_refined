@@ -12,8 +12,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="历 史 数 据"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="本日数据"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

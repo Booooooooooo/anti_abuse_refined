@@ -17,6 +17,7 @@ public class item {
         if(drop)num++;
         if(num == 3)stateTxt = "可能出现虐待";
         if(num == 2)stateTxt = "可能出现摔倒";
+        if(num == 1)stateTxt = "           ";
         int tmp = 0;
         if(heart){
             iconImg[tmp++] = iconId[num- 1][0];
