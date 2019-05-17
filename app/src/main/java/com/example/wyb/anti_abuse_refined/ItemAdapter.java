@@ -35,6 +35,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+    @Override
+    public long getItemId(int position){
+        return position;
+    }
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
         ViewHolder holder = new ViewHolder(view);
@@ -48,20 +56,44 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         item it = items.get(position);
         holder.timetxt.setText(it.getTimeTxt());
         holder.statetxt.setText(it.getStateTxt());
-        int[] img = it.getIconImg();
+        int[] img = {R.drawable.plain, R.drawable.plain, R.drawable.plain};
+        int tmp = 0;
+        //int[] img = it.getIconImg();
         int num = it.getNum();
-        if(num == 3){
-            holder.icon1.setImageResource(img[0]);
-            holder.icon2.setImageResource(img[1]);
-            holder.icon3.setImageResource(img[2]);
+        if(num == 1){
+            if(it.heart)img[tmp++] = R.drawable.blue_heart;
+            if(it.sound)img[tmp++] = R.drawable.blue_micro;
+            if(it.drop)img[tmp++] = R.drawable.blue_drop;
         }
         else if(num == 2){
-            holder.icon1.setImageResource(img[0]);
-            holder.icon2.setImageResource(img[1]);
+            if(it.heart)img[tmp++] = R.drawable.yellow_heart;
+            if(it.sound)img[tmp++] = R.drawable.yellow_micro;
+            if(it.drop)img[tmp++] = R.drawable.yellow_drop;
         }
-        else{
-            holder.icon1.setImageResource(img[0]);
+        else if(num == 3){
+            if(it.heart)img[tmp++] = R.drawable.red_heart;
+            if(it.sound)img[tmp++] = R.drawable.red_micro;
+            if(it.drop)img[tmp++] = R.drawable.red_drop;
         }
+        while(tmp < 3){
+            img[tmp++] = R.drawable.plain;
+        }
+
+        holder.icon1.setImageResource(img[0]);
+        holder.icon2.setImageResource(img[1]);
+        holder.icon3.setImageResource(img[2]);
+//        if(num == 3){
+//            holder.icon1.setImageResource(img[0]);
+//            holder.icon2.setImageResource(img[1]);
+//            holder.icon3.setImageResource(img[2]);
+//        }
+//        else if(num == 2){
+//            holder.icon1.setImageResource(img[0]);
+//            holder.icon2.setImageResource(img[1]);
+//        }
+//        else{
+//            holder.icon1.setImageResource(img[0]);
+//        }
     }
 
     @Override

@@ -10,7 +10,12 @@ public class item {
     private String timeTxt;
     private String stateTxt;
 
+    public boolean heart, sound, drop;
+
     public item(String t, boolean heart, boolean sound, boolean drop) {
+        this.heart = heart;
+        this.sound = sound;
+        this.drop = drop;
         timeTxt = t;
         if(heart)num++;
         if(sound)num++;
@@ -20,7 +25,7 @@ public class item {
         if(num == 1)stateTxt = "           ";
         int tmp = 0;
         if(heart){
-            iconImg[tmp++] = iconId[num- 1][0];
+            iconImg[tmp++] = iconId[num - 1][0];
         }
         if(sound){
             iconImg[tmp++] = iconId[num - 1][1];
@@ -28,7 +33,11 @@ public class item {
         if(drop){
             iconImg[tmp++] = iconId[num - 1][2];
         }
+        while(tmp < 3){
+            iconImg[tmp++] = R.drawable.plain;
+        }
     }
+
 
     public int getNum() {
         return num;

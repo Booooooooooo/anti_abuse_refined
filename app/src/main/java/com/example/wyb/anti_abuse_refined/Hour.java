@@ -24,6 +24,9 @@ public class Hour implements Serializable {
 
     public boolean[] normal = new boolean[4];
 
+    public void setVis(boolean vis){
+        this.vis = vis;
+    }
     @Override
     public String toString() {
         //这里直接在弹出框中显示

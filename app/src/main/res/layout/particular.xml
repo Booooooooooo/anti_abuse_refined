@@ -36,6 +36,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/fab_margin">
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,7 +83,7 @@
             <com.example.wyb.anti_abuse_refined.MyTable
                 android:id="@+id/table"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" /> <!---com.example.wyb.anti_abuse_refined.GitHubContributionView
+                android:layout_height="190dp" /> <!---com.example.wyb.anti_abuse_refined.GitHubContributionView
         android:id="@+id/table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -90,17 +91,24 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="140dp">
 
             </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
     </LinearLayout>
 
-        <!---com.example.wyb.anti_abuse_refined.TopView
-            android:id="@+id/topView"
-            android:layout_width="match_parent"
-            android:layout_height="150dp" /-->
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:background="@color/shadowColor"
+        android:layout_gravity="bottom"/>
+
+    <!---com.example.wyb.anti_abuse_refined.TopView
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" /-->
 
 
 

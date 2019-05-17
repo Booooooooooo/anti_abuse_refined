@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,6 +53,13 @@ public class ParticularFrag extends Fragment {
     private MyTable table;
     private List<item> itemList = new ArrayList<>();
     private ItemAdapter adapter;
+    private Runnable runnable;
+    private long lastTime = 1557286376;
+    private long nowTime = 1557977576;
+    private RecyclerView recyclerView;
+    //private List<PlainText> txtList = new ArrayList<>();
+
+    private int times = 0;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,45 +93,83 @@ public class ParticularFrag extends Fragment {
             table.setData(hour, j / 10, -1);
         }
 
-////        table.setData(8,0);
-////        table.setData(9,1);
-//        table.setData(14,5, 2);
-        get("iscry", 0);
-        get("heart", 1);
-        get("accelerate", 2);
-        addList();
-        //view.invalidate();
+        table.setData(9, 4, 2);
+        table.setData(9, 4, 0);
+        itemList.add(new item("9:40", true, false, true));
+        table.setData(13, 0, 0);
+        table.setData(13, 0, 1);
+        table.setData(13, 0, 2);
+        itemList.add(new item("13:00", true, true, true));
 
 
-//        itemList.add(new item("ceshi1", true, true, true));
-//        itemList.add(new item("ceshi2", true, false, true));
-//        itemList.add(new item("ceshi3", true, false, false));
-
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
+        recyclerView = (RecyclerView)view.findViewById(R.id.list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ItemAdapter(itemList);
+        adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
-        getData();
-        //addList();
+        //getData();
+
+        Button button = (Button)view.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                switch (times){
+                    //case 0:
+                        //itemList.clear();
+                        //break;
+                    case 0:
+                        table.setData(11, 0, 0);
+                        itemList.add(new item("11:00", false, true, false));
+                        break;
+                        //哭声
+                    case 1:
+                        table.setData(11, 1, 2);
+                        itemList.add(new item("11:10", false, false, true));
+                        break;
+                        //加速度
+                    case 2:
+                        table.setData(11, 2, 1);
+                        itemList.add(new item("11:20", true, false, false));
+                        break;//心率
+                    case 3:
+                        table.setData(11, 3, 0);
+                        table.setData(11, 3, 1);
+                        table.setData(11, 3, 2);
+                        itemList.add(new item("11:30", true, true, true));
+                        break;
+                        //all
+                }
+                //Collections.reverse(itemList);
+                adapter.notifyDataSetChanged();
+                //recyclerView.scrollToPosition(itemList.size() - 1);
+                table.invalidate();
+                view.invalidate();
+                times++;
+            }
+        });
+
         return view;
     }
 
     public void addList(){
         Iterator<Hour> iterator = table.mHours.iterator();
+        itemList.clear();
+        adapter.notifyDataSetChanged();
         for(int i = 0; i < table.mHours.size(); i++){
             Hour h = table.mHours.get(i);
-            if(table.mHours.get(i).vis)continue;
+            //if(table.mHours.get(i).vis)continue;
 
             String time = h.hour+":"+h.minute+"0";
             boolean heart = h.normal[0];
             boolean sound = h.normal[1];
             boolean drop = h.normal[2];
             if(h.contribution > 1){
-                table.mHours.get(i).vis = true;
+                //table.mHours.get(i).setVis(true);
                 itemList.add(new item(time, heart, sound, drop));
-                Log.d("SoundFragment", time + "contribuion"+h.contribution);
+                Log.d("SoundFragment", time + heart+sound+drop);
                 adapter.notifyDataSetChanged();
+                //adapter.notifyAll();
             }
         }
     }
@@ -147,13 +193,11 @@ public class ParticularFrag extends Fragment {
     private void parseJSONWithJSONObject(String jsonData, int id){
         //Log.d("SoundFragment", "type:" + id);
         try{
-            //JSONObject start = new JSONObject(String.valueOf(response.getJSONObject()));
             JSONObject jsonObject = new JSONObject(jsonData);
             String currentstamp = jsonObject.getString("currentStamp");
             JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
             String startStamp = jsonObject.getString("startStamp");
-            //Log.d("SoundFragment", "currentStamp: " + currentstamp);
-            //Log.d("SoundFragment", "startStamp: " + startStamp);
+
             for(int i = 0; i < jsonArray.length(); i++){
                 JSONObject dataObject = jsonArray.getJSONObject(i);
                 String result = dataObject.getString("state");
@@ -163,8 +207,12 @@ public class ParticularFrag extends Fragment {
                 calendar.setTime(date);
                 if(result != "0.0"){
                     table.setData(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE) / 10, id);
-                    //Log.d("SoundFragment", "result: " + result);
-                    //Log.d("SoundFragment", "stamp:" + date);
+                    //itemList.add()
+                    String type;
+                    if(id == 0)type = "哭声";
+                    else if(id == 1)type = "心率";
+                    else type = "加速度";
+                    //txtList.add(new PlainText(calendar.getTime() + type + "异常"));
                 }
 
             }
@@ -174,13 +222,14 @@ public class ParticularFrag extends Fragment {
         }
     }
     public void get(String type, final int id){
-        String address = "http://47.102.151.34:8000/" + type +"?currentStamp=1557710924&startStamp=1556934223";
+        //nowTime = lastTime + 10;
+        String address = "http://47.102.151.34:8000/" + type +"?currentStamp="+nowTime+"&startStamp="+lastTime;
         HttpUtil.sendOkHttpRequest(address, new okhttp3.Callback(){
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseData = response.body().string();
                 parseJSONWithJSONObject(responseData, id);
-                Log.d("SoundFragment", responseData);
+                //Log.d("SoundFragment", responseData);
             }
 
             @Override
@@ -192,7 +241,7 @@ public class ParticularFrag extends Fragment {
     }
     private void getData() {
         final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
+        runnable = new Runnable() {
             @Override
             public void run() {
                 get("iscry", 0);
@@ -200,10 +249,14 @@ public class ParticularFrag extends Fragment {
                 get("accelerate", 2);
                 addList();
                 Log.d("SoundFragment", "refreshed");
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 5000);
 ////                Collections.reverse(array);
+                //lastTime = nowTime;
+                //nowTime = lastTime + 5;
                 adapter.notifyDataSetChanged();
+                table.invalidate();
                 view.invalidate();
+
                 //setListViewHeightBaseOnChildren(listView, 30);
             }
         };
